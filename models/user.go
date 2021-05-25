@@ -31,6 +31,5 @@ func init() {
 	dbInfo := strings.Join([]string{DB_USER_NAME, ":", DB_PASSWORD, "@tcp(", DB_IP, ":", DB_PORT, ")/", DB_NAME, "?charset=utf8mb4"}, "")
 	orm.RegisterDataBase("default", "mysql", dbInfo)
 	orm.RegisterModel(new(User))
-	//orm.RegisterModel(new(User))
 	orm.RunSyncdb("default", false, true)
 }

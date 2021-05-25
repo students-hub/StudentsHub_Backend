@@ -10,12 +10,14 @@ package routers
 import (
 	"StudentsHub_Backend/controllers"
 
-	"github.com/astaxie/beego"
+	beego "github.com/beego/beego/v2/server/web"
 )
 
 func init() {
-	beego.Router("/", &controllers.UserController{})
-	beego.Router("/User/Login", &controllers.UserController{}, "get:Login")
-	beego.Router("/User/Logout", &controllers.UserController{}, "get:Logout")
-	beego.Router("/User/Signup", &controllers.UserController{}, "get:AddUser")
+	ns := beego.NewNamespace("/user",
+		beego.NSInclude(
+			&controllers.UserController{},
+		),
+	)
+	beego.AddNamespace(ns)
 }

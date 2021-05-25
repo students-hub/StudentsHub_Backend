@@ -4,7 +4,7 @@ import (
 	"StudentsHub_Backend/models"
 	"encoding/json"
 
-	"github.com/astaxie/beego"
+	beego "github.com/beego/beego/v2/server/web"
 )
 
 // Operations about object
@@ -89,4 +89,3 @@ func (o *ObjectController) Delete() {
 	o.Data["json"] = "delete success!"
 	o.ServeJSON()
 }
-

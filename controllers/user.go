@@ -6,9 +6,9 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/astaxie/beego"
 	"github.com/beego/beego/v2/adapter/orm"
 	"github.com/beego/beego/v2/core/logs"
+	beego "github.com/beego/beego/v2/server/web"
 )
 
 // Operations about Users
@@ -36,17 +36,6 @@ func (u *UserController) AddUser() {
 	u.ServeJSON()
 }
 
-// @Title Get
-// @Description get user by uid
-// @Param	uid		path 	string	true		"The key for staticblock"
-// @Success 200 {object} models.User
-// @Failure 403 :uid is empty
-// @router /:uid [get]
-
-func (u *UserController) Get() {
-
-}
-
 // @Title Update
 // @Description update the user
 // @Param	uid		path 	string	true		"The uid you want to update"
@@ -56,17 +45,6 @@ func (u *UserController) Get() {
 // @router /:uid [put]
 
 func (u *UserController) Put() {
-
-}
-
-// @Title Delete
-// @Description delete the user
-// @Param	uid		path 	string	true		"The uid you want to delete"
-// @Success 200 {string} delete success!
-// @Failure 403 uid is empty
-// @router /:uid [delete]
-
-func (u *UserController) Delete() {
 
 }
 
@@ -97,7 +75,7 @@ func (u *UserController) Login() {
 // @Title logout
 // @Description Logs out current logged in user session
 // @Success 200 {string} logout success
-// @router / [get]
+// @router /logout [get]
 func (u *UserController) Logout() {
 	u.Data["json"] = "logout success"
 	u.ServeJSON()
