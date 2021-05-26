@@ -21,31 +21,58 @@ type UserController struct {
 // @Param	body		body 	models.User	true		"body for user content"
 // @Success 200 {int} models.User.UserID
 // @Failure 403 body is empty
-// @router / [post]
+// @router /sign-up [post]
 func (u *UserController) AddUser() {
 	var user models.User
 	json.Unmarshal(u.Ctx.Input.RequestBody, &user)
 	o := orm.NewOrm()
+	o.Begin()
 	_, err := o.Insert(&user)
 	if err != nil {
 		logs.Info("添加失败，原因是:", err)
 		u.Ctx.WriteString("添加失败，原因是:" + err.Error())
+		o.Rollback()
 		return
+	} else {
+		o.Commit()
 	}
-	u.Data["json"] = map[string]int{"UserID": user.UserID}
+	u.Data["json"] = map[string]int{"UserID": user.UserID} //返回UserID, 给予用户提示
 	u.ServeJSON()
 }
 
 // @Title Update
 // @Description update the user
-// @Param	uid		path 	string	true		"The uid you want to update"
-// @Param	body		body 	models.User	true		"body for user content"
+// @Param	body		body 	models.User	true		"Old info of the user"
+// @Param	NewPassword		body 	string	true		"New Password"
 // @Success 200 {object} models.User
 // @Failure 403 :uid is not int
-// @router /:uid [put]
+// @router /updatepswd [put]
+func (u *UserController) UpdatePassword() {
+	var user models.User
+	//var u models.User
+	json.Unmarshal(u.Ctx.Input.RequestBody, &user)
+	m := make(map[string]string)
+	json.Unmarshal(u.Ctx.Input.RequestBody, &m)
+	o := orm.NewOrm()
+	_user := &models.User{UserName: user.UserName}
+	err := o.Read(_user, "UserName")
+	if err == nil {
 
-func (u *UserController) Put() {
+		//验证密码
+		if m["Password"] != _user.Password {
+			logs.Info("密码错误!")
+			u.Data["json"] = "原密码错误!"
+			u.ServeJSON()
+			return
+		}
 
+		_user.Password = m["NewPassword"]
+		if _, err := o.Update(_user, "Password", "UpdateAt"); err != nil {
+			logs.Info(err.Error())
+		}
+	} else {
+		logs.Info(err.Error())
+	}
 }
 
 // @Title Login
