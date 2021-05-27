@@ -1,4 +1,4 @@
-
+###注册
 POST http://localhost:8080/user/sign-up/
 Content-Type: application/json
 
@@ -8,7 +8,11 @@ Content-Type: application/json
     "Role": "1"
 }
 
-###
+###登录
+GET http://localhost:8080/user/login?UserName=小小展玮&Password=test123
+
+
+###修改密码
 PUT http://localhost:8080/user/updatepswd/
 Content-Type: application/json
 
@@ -17,4 +21,20 @@ Content-Type: application/json
     "UserName": "小小展玮",
     "Role": "1",
     "NewPassword": "test123"
+}
+
+###修改用户名
+PUT http://localhost:8080/user/updatename?OldName=小小展玮&NewName=大大坤坤
+
+###修改角色
+PUT http://localhost:8080/user/updaterole?&UserName=大大坤坤&NewRole=2
+
+###注销账户（删除）
+PUT http://localhost:8080/user/delete/
+Content-Type: application/json
+
+{
+    "Password": "test123",
+    "UserName": "大大坤坤",
+    "Role": "2"
 }
