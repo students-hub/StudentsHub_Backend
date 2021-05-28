@@ -7,6 +7,15 @@ import (
 
 func init() {
 
+    beego.GlobalControllerRouter["StudentsHub_Backend/controllers:CourseController"] = append(beego.GlobalControllerRouter["StudentsHub_Backend/controllers:CourseController"],
+        beego.ControllerComments{
+            Method: "AddCourse",
+            Router: "/add",
+            AllowHTTPMethods: []string{"put"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
     beego.GlobalControllerRouter["StudentsHub_Backend/controllers:UserController"] = append(beego.GlobalControllerRouter["StudentsHub_Backend/controllers:UserController"],
         beego.ControllerComments{
             Method: "Delete",

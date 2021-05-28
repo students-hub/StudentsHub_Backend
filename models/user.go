@@ -23,15 +23,8 @@ type User struct {
 	UserName string    `orm:"size(255);unique"` // NOT NULL
 	CreateAt time.Time `orm:"auto_now"`
 	UpdateAt time.Time `orm:"auto_now"`
-	Role     string    `orm:"size(1)"`
+	Role     string    `orm:"size(1)"` //1 teacher; 2 assistant; 3 student
 }
-
-/*
-type UserPswdResetReq struct {
-	User
-	newPswd string
-}
-*/
 
 func init() {
 	// 构建连接："用户名:密码@tcp(IP:端口)/数据库?charset=utf8mb4"

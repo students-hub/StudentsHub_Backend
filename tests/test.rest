@@ -1,3 +1,4 @@
+###用户
 ###注册
 POST http://localhost:8080/user/sign-up/
 Content-Type: application/json
@@ -38,3 +39,8 @@ Content-Type: application/json
     "UserName": "大大坤坤",
     "Role": "2"
 }
+
+
+###课程
+###添加课程
+PUT http://localhost:8080/course/add?UserName=小小展玮&CourseName=软件工程

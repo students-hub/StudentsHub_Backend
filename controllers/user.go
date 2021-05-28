@@ -17,6 +17,21 @@ type UserController struct {
 	beego.Controller
 }
 
+func Authenticate(UserName string, Password string) (bool, error) {
+	o := orm.NewOrm()
+	user := models.User{UserName: UserName}
+	err := o.QueryTable("user").Filter("UserName", UserName).Limit(1).One(&user)
+	if err != nil {
+		logs.Info("查询失败，原因是:", err)
+		return false, errors.New(strings.Join([]string{"查询失败，原因是", err.Error()}, ""))
+	}
+	if user.Password == Password {
+		return true, nil
+	} else {
+		return false, errors.New("密码错误")
+	}
+}
+
 // @Title CreateUser
 // @Description create users
 // @Param	body		body 	models.User	true		"body for user content"
@@ -32,10 +47,10 @@ func (u *UserController) AddUser() {
 	if err != nil {
 		logs.Info("添加失败，原因是:", err)
 		u.Ctx.WriteString("添加失败，原因是:" + err.Error())
-		o.Rollback()
+		o.Rollback() //回滚
 		return
 	} else {
-		o.Commit()
+		o.Commit() //完成加入
 	}
 	u.Data["json"] = map[string]int{"UserID": user.UserID} //返回UserID, 给予用户提示
 	u.ServeJSON()
@@ -216,21 +231,5 @@ func (u *UserController) Delete() {
 		u.Data["json"] = "delete failed"
 		u.ServeJSON()
 		return
-	}
-
-}
-
-func Authenticate(UserName string, Password string) (bool, error) {
-	o := orm.NewOrm()
-	user := models.User{UserName: UserName}
-	err := o.QueryTable("user").Filter("UserName", UserName).Limit(1).One(&user)
-	if err != nil {
-		logs.Info("查询失败，原因是:", err)
-		return false, errors.New(strings.Join([]string{"查询失败，原因是", err.Error()}, ""))
-	}
-	if user.Password == Password {
-		return true, nil
-	} else {
-		return false, errors.New("密码错误")
 	}
 }
