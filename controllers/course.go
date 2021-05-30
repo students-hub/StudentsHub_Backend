@@ -37,6 +37,9 @@ func (c *CourseController) AddCourse() {
 			o.Rollback() //回滚
 			return
 		} else {
+
+			// more features
+
 			o.Commit() //加入
 		}
 		c.Data["json"] = map[string]int{"CourseID": course.CourseID} //返回CourseID, 给予用户提示
@@ -50,6 +53,45 @@ func (c *CourseController) AddCourse() {
 	}
 }
 
+// @Title Delete Course
+// @Description delete course
+// @Param	UserName		query 	string	true		"Course Creator"
+// @Param	CourseName		query 	string	true		"Course Name"
+// @Success 200 {string} delete succeeded
+// @Failure 403 delete failed
+// @router /delete [put]
+func (c *CourseController) DeleteCourse() {
+	UserName := c.GetString("UserName")
+	access := AccessQuery(UserName)
+	if access[0] == '1' {
+		CourseName := c.GetString("CourseName")
+		_course := &models.Course{TeacherName: UserName, CourseName: CourseName}
+		o := orm.NewOrm()
+		o.Read(_course, "TeacherName", "CourseName")
+		o.Begin()
+
+		//先删除user_course表里的信息，否则会找不到CourseID
+		o.Raw(`DELETE FROM user__course WHERE course_i_d = (SELECT course_i_d FROM course WHERE teacher_name=? AND course_name=?)`).SetArgs(UserName, CourseName).Exec()
+
+		// more features
+
+		if _, err := o.Delete(_course); err != nil { //删除course表里的信息
+			logs.Info(err.Error())
+			c.Data["json"] = "delete failed"
+			o.Rollback()
+		} else {
+			c.Data["json"] = "delete succeeded"
+			o.Commit()
+		}
+		c.ServeJSON()
+		return
+	} else {
+		logs.Info("您没有删除班级的权限!")
+		c.Data["json"] = "您没有删除班级的权限!"
+		c.ServeJSON()
+		return
+	}
+}
 func AccessQuery(UserName string) string {
 	var access string
 	o := orm.NewOrm()
