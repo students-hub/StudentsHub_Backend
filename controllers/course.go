@@ -15,16 +15,16 @@ type CourseController struct {
 
 // @Title Add Course
 // @Description add course
-// @Param	UserName		query 	string	true		"Course Creator"
-// @Param	CourseName		query 	string	true		"Course Name"
+// @Param	user_name		query 	string	true		"Course Creator"
+// @Param	course_name		query 	string	true		"Course Name"
 // @Success 200 {string} add succeeded
 // @Failure 403 add failed
 // @router /add [put]
 func (c *CourseController) AddCourse() {
-	UserName := c.GetString("UserName")
+	UserName := c.GetString("user_name")
 	access := AccessQuery(UserName)
 	if access[0] == '1' {
-		CourseName := c.GetString("CourseName")
+		CourseName := c.GetString("course_name")
 		var course models.Course
 		course.CourseName = CourseName
 		course.TeacherName = UserName
@@ -34,7 +34,9 @@ func (c *CourseController) AddCourse() {
 		if err != nil {
 			logs.Info("添加失败，原因是:", err)
 			c.Ctx.WriteString("添加失败，原因是:" + err.Error())
-			o.Rollback() //回滚
+			o.Rollback()                         //回滚
+			c.Data["json"] = "add course failed" //返回错误
+			c.ServeJSON()
 			return
 		} else {
 
@@ -42,12 +44,12 @@ func (c *CourseController) AddCourse() {
 
 			o.Commit() //加入
 		}
-		c.Data["json"] = map[string]int{"CourseID": course.CourseID} //返回CourseID, 给予用户提示
+		c.Data["json"] = map[string]int{"course_id": course.CourseID} //返回CourseID, 给予用户提示
 		c.ServeJSON()
 		return
 	} else {
 		logs.Info("您没有创建班级的权限!")
-		c.Data["json"] = "您没有创建班级的权限!"
+		c.Data["json"] = "access denied"
 		c.ServeJSON()
 		return
 	}
@@ -55,16 +57,16 @@ func (c *CourseController) AddCourse() {
 
 // @Title Delete Course
 // @Description delete course
-// @Param	UserName		query 	string	true		"Course Creator"
-// @Param	CourseName		query 	string	true		"Course Name"
+// @Param	user_name		query 	string	true		"Course Creator"
+// @Param	course_name		query 	string	true		"Course Name"
 // @Success 200 {string} delete succeeded
 // @Failure 403 delete failed
 // @router /delete [put]
 func (c *CourseController) DeleteCourse() {
-	UserName := c.GetString("UserName")
+	UserName := c.GetString("user_name")
 	access := AccessQuery(UserName)
 	if access[0] == '1' {
-		CourseName := c.GetString("CourseName")
+		CourseName := c.GetString("course_name")
 		_course := &models.Course{TeacherName: UserName, CourseName: CourseName}
 		o := orm.NewOrm()
 		o.Read(_course, "TeacherName", "CourseName")
