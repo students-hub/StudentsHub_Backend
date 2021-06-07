@@ -1,6 +1,6 @@
 ###用户
 ###注册
-POST http://localhost:8080/user/sign-up/
+POST http://1.14.165.254:8088/user/sign-up/
 Content-Type: application/json
 
 {
@@ -10,7 +10,7 @@ Content-Type: application/json
 }
 
 ###登录
-GET http://localhost:8080/user/login?user_name=小小展玮&password=test
+GET http://1.14.165.254:8088/user/login?user_name=小小展玮&password=test
 
 
 ###修改密码

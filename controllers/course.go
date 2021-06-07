@@ -33,7 +33,7 @@ func (c *CourseController) AddCourse() {
 		_, err := o.Insert(&course)
 		if err != nil {
 			logs.Info("添加失败，原因是:", err)
-			c.Ctx.WriteString("添加失败，原因是:" + err.Error())
+			//c.Ctx.WriteString("添加失败，原因是:" + err.Error())
 			o.Rollback()                         //回滚
 			c.Data["json"] = "add course failed" //返回错误
 			c.ServeJSON()
@@ -89,7 +89,7 @@ func (c *CourseController) DeleteCourse() {
 		return
 	} else {
 		logs.Info("您没有删除班级的权限!")
-		c.Data["json"] = "您没有删除班级的权限!"
+		c.Data["json"] = "access denied"
 		c.ServeJSON()
 		return
 	}

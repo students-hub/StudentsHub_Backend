@@ -50,8 +50,8 @@ func (u *UserController) AddUser() {
 	_, err := o.Insert(&user)
 	if err != nil {
 		logs.Info("添加失败，原因是:", err)
-		u.Ctx.WriteString("添加失败，原因是:" + err.Error())
-		u.Data["json"] = "add user failed"
+		//u.Ctx.WriteString("添加失败，原因是:" + err.Error())
+		u.Data["json"] = "add user failed; duplicate user name"
 		u.ServeJSON()
 		o.Rollback() //回滚
 		return
@@ -142,7 +142,7 @@ func (u *UserController) UpdateUsername() {
 		return
 	} else {
 		logs.Info("用户名已存在!")
-		u.Data["json"] = "user name already exists"
+		u.Data["json"] = "new user name already exists"
 		u.ServeJSON()
 		return
 	}
