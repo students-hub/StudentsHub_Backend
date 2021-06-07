@@ -19,7 +19,7 @@ type CourseController struct {
 // @Param	course_name		query 	string	true		"Course Name"
 // @Success 200 {string} add succeeded
 // @Failure 403 add failed
-// @router /add [put]
+// @router /add [post]
 func (c *CourseController) AddCourse() {
 	UserName := c.GetString("user_name")
 	access := AccessQuery(UserName)
@@ -61,7 +61,7 @@ func (c *CourseController) AddCourse() {
 // @Param	course_name		query 	string	true		"Course Name"
 // @Success 200 {string} delete succeeded
 // @Failure 403 delete failed
-// @router /delete [put]
+// @router /delete [delete]
 func (c *CourseController) DeleteCourse() {
 	UserName := c.GetString("user_name")
 	access := AccessQuery(UserName)

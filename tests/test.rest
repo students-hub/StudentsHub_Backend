@@ -14,7 +14,7 @@ GET http://1.14.165.254:8088/user/login?user_name=小小展玮&password=test
 
 
 ###修改密码
-PUT http://localhost:8080/user/updatepswd/
+PUT http://localhost:8088/user/updatepswd/
 Content-Type: application/json
 
 {
@@ -24,13 +24,13 @@ Content-Type: application/json
 }
 
 ###修改用户名
-PUT http://localhost:8080/user/updatename?old_name=大大展玮&new_name=小小展玮
+PUT http://localhost:8088/user/updatename?old_name=大大展玮&new_name=小小展玮
 
 ###修改角色
-PUT http://localhost:8080/user/updaterole?&user_name=小小展玮&new_role=1
+PUT http://localhost:8088/user/updaterole?&user_name=小小展玮&new_role=1
 
 ###注销账户（删除）
-PUT http://localhost:8080/user/delete/
+PUT http://localhost:8088/user/delete/
 Content-Type: application/json
 
 {
@@ -39,10 +39,12 @@ Content-Type: application/json
     "role": "1"
 }
 
+###查询信息
+GET http://localhost:8088/user/getinfo?user_name=小小展玮
 
 ###课程
 ###添加课程
-PUT http://localhost:8080/course/add?user_name=小小展玮&course_name=数据结构
+PUT http://localhost:8088/course/add?user_name=小小展玮&course_name=数据结构
 
 ###删除课程
-PUT http://localhost:8080/course/delete?user_name=小小展玮&course_name=数据结构
+PUT http://localhost:8088/course/delete?user_name=小小展玮&course_name=数据结构

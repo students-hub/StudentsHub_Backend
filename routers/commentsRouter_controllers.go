@@ -11,7 +11,7 @@ func init() {
         beego.ControllerComments{
             Method: "AddCourse",
             Router: "/add",
-            AllowHTTPMethods: []string{"put"},
+            AllowHTTPMethods: []string{"post"},
             MethodParams: param.Make(),
             Filters: nil,
             Params: nil})
@@ -20,7 +20,7 @@ func init() {
         beego.ControllerComments{
             Method: "DeleteCourse",
             Router: "/delete",
-            AllowHTTPMethods: []string{"put"},
+            AllowHTTPMethods: []string{"delete"},
             MethodParams: param.Make(),
             Filters: nil,
             Params: nil})
@@ -29,7 +29,16 @@ func init() {
         beego.ControllerComments{
             Method: "Delete",
             Router: "/delete",
-            AllowHTTPMethods: []string{"put"},
+            AllowHTTPMethods: []string{"delete"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["StudentsHub_Backend/controllers:UserController"] = append(beego.GlobalControllerRouter["StudentsHub_Backend/controllers:UserController"],
+        beego.ControllerComments{
+            Method: "GetInfo",
+            Router: "/getinfo",
+            AllowHTTPMethods: []string{"get"},
             MethodParams: param.Make(),
             Filters: nil,
             Params: nil})
@@ -38,7 +47,7 @@ func init() {
         beego.ControllerComments{
             Method: "Login",
             Router: "/login",
-            AllowHTTPMethods: []string{"get"},
+            AllowHTTPMethods: []string{"post"},
             MethodParams: param.Make(),
             Filters: nil,
             Params: nil})
@@ -47,7 +56,7 @@ func init() {
         beego.ControllerComments{
             Method: "Logout",
             Router: "/logout",
-            AllowHTTPMethods: []string{"get"},
+            AllowHTTPMethods: []string{"post"},
             MethodParams: param.Make(),
             Filters: nil,
             Params: nil})

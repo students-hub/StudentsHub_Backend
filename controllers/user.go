@@ -4,6 +4,7 @@ import (
 	"StudentsHub_Backend/models"
 	"encoding/json"
 	"errors"
+	"strconv"
 	"strings"
 
 	"github.com/beego/beego/v2/adapter/orm"
@@ -192,7 +193,7 @@ func (u *UserController) UpdateRole() {
 // @Param	password	query 	string	true		"The password for login"
 // @Success 200 {string} login success
 // @Failure 403 user not exist or password invalid
-// @router /login [get]
+// @router /login [post]
 func (u *UserController) Login() {
 	UserName := u.GetString("user_name")
 	Password := u.GetString("password")
@@ -205,10 +206,24 @@ func (u *UserController) Login() {
 	u.ServeJSON()
 }
 
+// @Title GetInfo
+// @Description Get Info
+// @Param	user_name	query 	string	true		"The username"
+// @Success 200
+// @router /getinfo [get]
+func (u *UserController) GetInfo() {
+	UserName := u.GetString("user_name")
+	o := orm.NewOrm()
+	_user := &models.User{UserName: UserName}
+	o.Read(_user, "UserName")                                                                                                                                                                                       //在数据库里读信息
+	u.Data["json"] = map[string]string{"user_id": strconv.Itoa(_user.UserID), "user_name": _user.UserName, "role": _user.Role, "create_time": _user.CreateAt.String(), "last_update_time": _user.UpdateAt.String()} //返回UserInfo
+	u.ServeJSON()
+}
+
 // @Title Logout
 // @Description Logs out current logged in user session
 // @Success 200 {string} logout success
-// @router /logout [get]
+// @router /logout [post]
 func (u *UserController) Logout() {
 	u.Data["json"] = "logout succeeded"
 	u.ServeJSON()
@@ -218,7 +233,7 @@ func (u *UserController) Logout() {
 // @Description Delete user
 // @Param	body	body 	models.User	true		"User Info"
 // @Success 200 {string} delete success
-// @router /delete [put]
+// @router /delete [delete]
 func (u *UserController) Delete() {
 	var user models.User
 	m := make(map[string]string)
